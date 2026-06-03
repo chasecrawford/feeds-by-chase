@@ -178,13 +178,11 @@ export const FEEDS: FeedDef[] = [
       String.raw`\b(boy\b.*?\s*.*?\bkavalier)\b`,
       String.raw`\b(kavalier\b.*?\s*.*?\beye)\b`,
       String.raw`\b(eye\b.*?\s*.*?\bkavalier)\b`,
-      // Wendy × {nibs, curly, slightly, isaac, tootles, xenomorph, hermit, smee}
+      // Wendy × {nibs, curly, isaac, tootles, xenomorph, hermit, smee}
       String.raw`\b(wendy\b.*?\s*.*?\bnibs)\b`,
       String.raw`\b(nibs\b.*?\s*.*?\bwendy)\b`,
       String.raw`\b(wendy\b.*?\s*.*?\bcurly)\b`,
       String.raw`\b(curly\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bslightly)\b`,
-      String.raw`\b(slightly\b.*?\s*.*?\bwendy)\b`,
       String.raw`\b(wendy\b.*?\s*.*?\bisaac)\b`,
       String.raw`\b(isaac\b.*?\s*.*?\bwendy)\b`,
       String.raw`\b(wendy\b.*?\s*.*?\btootles)\b`,
@@ -195,17 +193,11 @@ export const FEEDS: FeedDef[] = [
       String.raw`\b(hermit\b.*?\s*.*?\bwendy)\b`,
       String.raw`\b(wendy\b.*?\s*.*?\bsmee)\b`,
       String.raw`\b(smee\b.*?\s*.*?\bwendy)\b`,
-      // Slightly × {smee, xenomorph, morrow, egg, arthur}
-      String.raw`\b(slightly\b.*?\s*.*?\bsmee)\b`,
-      String.raw`\b(smee\b.*?\s*.*?\bslightly)\b`,
-      String.raw`\b(slightly\b.*?\s*.*?\bxenomorph)\b`,
-      String.raw`\b(xenomorph\b.*?\s*.*?\bslightly)\b`,
-      String.raw`\b(slightly\b.*?\s*.*?\bmorrow)\b`,
-      String.raw`\b(morrow\b.*?\s*.*?\bslightly)\b`,
-      String.raw`\b(slightly\b.*?\s*.*?\begg)\b`,
-      String.raw`\b(egg\b.*?\s*.*?\bslightly)\b`,
-      String.raw`\b(slightly\b.*?\s*.*?\barthur)\b`,
-      String.raw`\b(arthur\b.*?\s*.*?\bslightly)\b`,
+      // NOTE: all "slightly ×" pairs were removed — "slightly" is too common a
+      // word and caused false positives. This also dropped the morrow/egg/arthur
+      // pairings, which only existed alongside slightly. To bring a character
+      // back, pair it with a DISTINCTIVE anchor, e.g.:
+      //   String.raw`\b(morrow\b.*?\s*.*?\bxenomorph)\b`,
     ].join('|'),
     // Trimmed the Sept-2025 Kimmel "cancel-culture" excludes (stale + they
     // blocked legit renewal/cancellation news); kept glitchart. No language
