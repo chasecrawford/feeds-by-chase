@@ -88,7 +88,10 @@ export const FEEDS: FeedDef[] = [
       String.raw`\bcardinals?\b\W+\bstadium\b`,
       String.raw`\bl&n\b\W+(?:federal\W+credit\W+union\W+)?stadium\b`,
     ].join('|'),
-    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison`,
+    // Excludes: filter non-UofL-football noise that trips louisville×football —
+    // other "football" leagues (UFL), soccer (Louisville City FC / USL), and
+    // radio "now playing" music bots (a musician named BROHM).
+    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison|united football league|\bufl\b|louisville city|\busl\b|#nowplaying`,
     blockLists: [
       'at://did:plc:7csbewiebijimkryjynrmtc2/app.bsky.graph.list/3lxcbpfhbbd2w',
     ],
