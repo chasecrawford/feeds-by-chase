@@ -22,7 +22,18 @@ function collectEmbed(embed: unknown, parts: string[]) {
     const ext = e.external as Record<string, any>
     if (ext.title) parts.push(String(ext.title))
     if (ext.description) parts.push(String(ext.description))
-    if (ext.uri) parts.push(String(ext.uri))
+    // Include only the hostname of the URI — never the path. Path segments can
+    // contain author names, article slugs, etc. that accidentally match player
+    // surnames or topic keywords (e.g. /autoren/eva-kienholz/ matching \bkienholz\b).
+    // Domain-based include patterns (cardchronicle.com) still work; standalone
+    // keyword patterns cannot match unintended URL paths.
+    if (ext.uri) {
+      try {
+        parts.push(new URL(String(ext.uri)).hostname)
+      } catch {
+        // malformed URI — skip entirely rather than risk a path match
+      }
+    }
   }
 
   // app.bsky.embed.images — alt text
