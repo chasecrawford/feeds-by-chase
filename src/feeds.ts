@@ -52,7 +52,7 @@ export const FEEDS: FeedDef[] = [
     displayName: 'Louisville Football',
     description:
       'Posts that contain keywords related to the University of Louisville football team sorted chronologically',
-    // Built from the SkyFeed export, then trimmed/refreshed (2026-06-03):
+    // Built from the SkyFeed export, then trimmed/refreshed (2026-06-05):
     // dropped last season's opponents + departed players; kept the durable
     // core; added verified 2026 well-known players and the football venue.
     // Each line below is one alternative; they're joined with "|".
@@ -60,8 +60,8 @@ export const FEEDS: FeedDef[] = [
     // ROSTER MAINTENANCE:
     //   - Add a player with a distinctive name (standalone):  String.raw`\bkienholz\b`
     //   - Add a player with a common name (scope to Louisville, both orders):
-    //       String.raw`\b(louisville\b.*?\s*.*?\bisaac\b\W+\bbrown)\b`,
-    //       String.raw`\b(isaac\b\W+\bbrown\b.*?\s*.*?\blouisville)\b`,
+    //       String.raw`\b(louisville\b.{0,500}\bisaac\b\W+\bbrown)\b`,
+    //       String.raw`\b(isaac\b\W+\bbrown\b.{0,500}\blouisville)\b`,
     //   - Add a seasonal OPPONENT (game-week, both orders), e.g. EKU:
     //       String.raw`\b(louisville\b.*?\s*.*?\beku)\b`,
     //       String.raw`\b(eku\b.*?\s*.*?\blouisville)\b`,
@@ -72,18 +72,18 @@ export const FEEDS: FeedDef[] = [
       // Coach (evergreen)
       String.raw`\bbrohm\b`,
       // Core: louisville + football, either order
-      String.raw`\b(louisville\b.*?\s*.*?\bfootball)\b`,
-      String.raw`\b(football\b.*?\s*.*?\blouisville)\b`,
+      String.raw`\b(louisville\b.{0,500}\bfootball)\b`,
+      String.raw`\b(football\b.{0,500}\blouisville)\b`,
       // Card Chronicle (SB Nation Louisville) + football
-      String.raw`\b(cardchronicle.com\b.*?\s*.*?\bfootball)\b`,
-      String.raw`\b(football\b.*?\s*.*?\bcardchronicle.com)\b`,
+      String.raw`\b(cardchronicle.com\b.{0,500}\bfootball)\b`,
+      String.raw`\b(football\b.{0,500}\bcardchronicle.com)\b`,
       // Well-known 2026 players — distinctive names, standalone
       String.raw`\bkienholz\b`, // Lincoln Kienholz, QB
       String.raw`\bclev\b\W+\blubin\b`, // Clev Lubin, EDGE
       String.raw`\btayon\b\W+\bholloway\b`, // Tayon Holloway, CB
       // Isaac Brown, RB — common name, scoped to Louisville context
-      String.raw`\b(louisville\b.*?\s*.*?\bisaac\b\W+\bbrown)\b`,
-      String.raw`\b(isaac\b\W+\bbrown\b.*?\s*.*?\blouisville)\b`,
+      String.raw`\b(louisville\b.{0,500}\bisaac\b\W+\bbrown)\b`,
+      String.raw`\b(isaac\b\W+\bbrown\b.{0,500}\blouisville)\b`,
       // Football venue (football-specific)
       String.raw`\bcardinals?\b\W+\bstadium\b`,
       String.raw`\bl&n\b\W+(?:federal\W+credit\W+union\W+)?stadium\b`,
@@ -91,7 +91,7 @@ export const FEEDS: FeedDef[] = [
     // Excludes: filter non-UofL-football noise that trips louisville×football —
     // other "football" leagues (UFL), soccer (Louisville City FC / USL), and
     // radio "now playing" music bots (a musician named BROHM).
-    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison|united football league|\bufl\b|louisville city|\busl\b|#nowplaying`,
+    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison|united football league|\bufl\b|louisville city|\busl\b|\blegion\b|#nowplaying`,
     blockLists: [
       'at://did:plc:7csbewiebijimkryjynrmtc2/app.bsky.graph.list/3lxcbpfhbbd2w',
     ],
