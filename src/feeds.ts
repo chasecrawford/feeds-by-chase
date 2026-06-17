@@ -89,9 +89,10 @@ export const FEEDS: FeedDef[] = [
       String.raw`\bl&n\b\W+(?:federal\W+credit\W+union\W+)?stadium\b`,
     ].join('|'),
     // Excludes: filter non-UofL-football noise that trips louisville×football —
-    // other "football" leagues (UFL), soccer (Louisville City FC / USL), and
-    // radio "now playing" music bots (a musician named BROHM).
-    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison|united football league|\bufl\b|louisville city|\busl\b|\blegion\b|#nowplaying`,
+    // other "football" leagues (UFL), the pro/spring "Louisville Kings" team,
+    // soccer (Louisville City FC / USL), the St. Louis Cardinals' & other schools'
+    // "Cardinal Stadium" (vs UofL's), and radio "now playing" bots (musician BROHM).
+    excludeRegex: String.raw`racing louisville|louisville-area|brohm ridge|#tennesseesports|sportskeeda|#spartans|inmate|prison|united football league|\bufl\b|louisville city|\busl\b|\blegion\b|\blouisville\b\W+\bkings\b|st\.?\s*louis|robertson high|#nowplaying`,
     blockLists: [
       'at://did:plc:7csbewiebijimkryjynrmtc2/app.bsky.graph.list/3lxcbpfhbbd2w',
     ],
@@ -125,29 +126,33 @@ export const FEEDS: FeedDef[] = [
       String.raw`\bmackenly\b\W+\brandolph\b`, // Mackenly Randolph, F
       String.raw`\bimari\b\W+\bberry\b`, // Imari Berry, G
       String.raw`\btaj\b\W+\broberts\b`, // Taj Roberts, G
-      // Arena (basketball-specific venue, both teams)
-      String.raw`\byum\b\W+\bcenter\b`,
-      // louisville × {basketball, hoops, 2013 champion}
-      String.raw`\b(louisville\b.*?\s*.*?\bbasketball)\b`,
-      String.raw`\b(basketball\b.*?\s*.*?\blouisville)\b`,
-      String.raw`\b(louisville\b.*?\s*.*?\bhoops)\b`,
-      String.raw`\b(hoops\b.*?\s*.*?\blouisville)\b`,
-      String.raw`\b(louisville\b.*?\s*.*?\b2013\b\W+\bchampion)\b`,
-      String.raw`\b(2013\b\W+\bchampion\b.*?\s*.*?\blouisville)\b`,
+      // Arena (basketball-specific venue) — scoped to a UofL/basketball signal so
+      // concerts at the Yum Center (Weird Al, Billy Strings, etc.) don't match.
+      String.raw`\b(yum\b\W+\bcenter\b.{0,500}\b(?:louisville|uofl|cards?|cardinals|basketball|hoops|kelsey|walz)\b)`,
+      String.raw`\b((?:louisville|uofl|cards?|cardinals|basketball|hoops|kelsey|walz)\b.{0,500}\byum\b\W+\bcenter)\b`,
+      // louisville × {basketball, hoops, 2013 champion} — bounded gap (.{0,500})
+      // so the two words must co-occur within one post/headline, not across a
+      // whole shared article's concatenated link-card text.
+      String.raw`\b(louisville\b.{0,500}\bbasketball)\b`,
+      String.raw`\b(basketball\b.{0,500}\blouisville)\b`,
+      String.raw`\b(louisville\b.{0,500}\bhoops)\b`,
+      String.raw`\b(hoops\b.{0,500}\blouisville)\b`,
+      String.raw`\b(louisville\b.{0,500}\b2013\b\W+\bchampion)\b`,
+      String.raw`\b(2013\b\W+\bchampion\b.{0,500}\blouisville)\b`,
       // uofl × {basketball, hoops, 2013 champion}
-      String.raw`\b(uofl\b.*?\s*.*?\bbasketball)\b`,
-      String.raw`\b(basketball\b.*?\s*.*?\buofl)\b`,
-      String.raw`\b(uofl\b.*?\s*.*?\bhoops)\b`,
-      String.raw`\b(hoops\b.*?\s*.*?\buofl)\b`,
-      String.raw`\b(uofl\b.*?\s*.*?\b2013\b\W+\bchampion)\b`,
-      String.raw`\b(2013\b\W+\bchampion\b.*?\s*.*?\buofl)\b`,
+      String.raw`\b(uofl\b.{0,500}\bbasketball)\b`,
+      String.raw`\b(basketball\b.{0,500}\buofl)\b`,
+      String.raw`\b(uofl\b.{0,500}\bhoops)\b`,
+      String.raw`\b(hoops\b.{0,500}\buofl)\b`,
+      String.raw`\b(uofl\b.{0,500}\b2013\b\W+\bchampion)\b`,
+      String.raw`\b(2013\b\W+\bchampion\b.{0,500}\buofl)\b`,
       // cardchronicle.com × {basketball, hoops, 2013 champion}
-      String.raw`\b(cardchronicle.com\b.*?\s*.*?\bbasketball)\b`,
-      String.raw`\b(basketball\b.*?\s*.*?\bcardchronicle.com)\b`,
-      String.raw`\b(cardchronicle.com\b.*?\s*.*?\bhoops)\b`,
-      String.raw`\b(hoops\b.*?\s*.*?\bcardchronicle.com)\b`,
-      String.raw`\b(cardchronicle.com\b.*?\s*.*?\b2013\b\W+\bchampion)\b`,
-      String.raw`\b(2013\b\W+\bchampion\b.*?\s*.*?\bcardchronicle.com)\b`,
+      String.raw`\b(cardchronicle.com\b.{0,500}\bbasketball)\b`,
+      String.raw`\b(basketball\b.{0,500}\bcardchronicle.com)\b`,
+      String.raw`\b(cardchronicle.com\b.{0,500}\bhoops)\b`,
+      String.raw`\b(hoops\b.{0,500}\bcardchronicle.com)\b`,
+      String.raw`\b(cardchronicle.com\b.{0,500}\b2013\b\W+\bchampion)\b`,
+      String.raw`\b(2013\b\W+\bchampion\b.{0,500}\bcardchronicle.com)\b`,
     ].join('|'),
     excludeRegex: String.raw`scam|rawchili.com`,
     blockLists: [
@@ -176,36 +181,44 @@ export const FEEDS: FeedDef[] = [
       String.raw`\beyectopus\b`,
       String.raw`\beyeoctopus\b`,
       String.raw`\bmr.\b\W+\bstrawberry\b`,
-      // Boy Kavalier (kavalier × boy/eye, both orders)
-      String.raw`\b(kavalier\b.*?\s*.*?\bboy)\b`,
-      String.raw`\b(boy\b.*?\s*.*?\bkavalier)\b`,
-      String.raw`\b(kavalier\b.*?\s*.*?\beye)\b`,
-      String.raw`\b(eye\b.*?\s*.*?\bkavalier)\b`,
+      // Boy Kavalier (kavalier × boy/eye, both orders). Bounded gap (.{0,80}): the
+      // names must co-occur within one phrase, not anywhere across a long shared
+      // article's concatenated link-card text. (Unbounded .*?\s*.*? matched common
+      // names — e.g. "Wendy Liu"+"hermit-kingdom", "Wendy Becker"+"Isaac Sherman" —
+      // across whole articles, and was a regex-backtracking hazard.)
+      String.raw`\b(kavalier\b.{0,80}\bboy)\b`,
+      String.raw`\b(boy\b.{0,80}\bkavalier)\b`,
+      String.raw`\b(kavalier\b.{0,80}\beye)\b`,
+      String.raw`\b(eye\b.{0,80}\bkavalier)\b`,
       // Wendy × {nibs, curly, isaac, tootles, xenomorph, hermit, smee}
-      String.raw`\b(wendy\b.*?\s*.*?\bnibs)\b`,
-      String.raw`\b(nibs\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bcurly)\b`,
-      String.raw`\b(curly\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bisaac)\b`,
-      String.raw`\b(isaac\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\btootles)\b`,
-      String.raw`\b(tootles\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bxenomorph)\b`,
-      String.raw`\b(xenomorph\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bhermit)\b`,
-      String.raw`\b(hermit\b.*?\s*.*?\bwendy)\b`,
-      String.raw`\b(wendy\b.*?\s*.*?\bsmee)\b`,
-      String.raw`\b(smee\b.*?\s*.*?\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bnibs)\b`,
+      String.raw`\b(nibs\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bcurly)\b`,
+      String.raw`\b(curly\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bisaac)\b`,
+      String.raw`\b(isaac\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\btootles)\b`,
+      String.raw`\b(tootles\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bxenomorph)\b`,
+      String.raw`\b(xenomorph\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bhermit)\b`,
+      String.raw`\b(hermit\b.{0,80}\bwendy)\b`,
+      String.raw`\b(wendy\b.{0,80}\bsmee)\b`,
+      String.raw`\b(smee\b.{0,80}\bwendy)\b`,
       // NOTE: all "slightly ×" pairs were removed — "slightly" is too common a
       // word and caused false positives. This also dropped the morrow/egg/arthur
       // pairings, which only existed alongside slightly. To bring a character
       // back, pair it with a DISTINCTIVE anchor, e.g.:
-      //   String.raw`\b(morrow\b.*?\s*.*?\bxenomorph)\b`,
+      //   String.raw`\b(morrow\b.{0,80}\bxenomorph)\b`,
     ].join('|'),
     // Trimmed the Sept-2025 Kimmel "cancel-culture" excludes (stale + they
     // blocked legit renewal/cancellation news); kept glitchart. No language
     // filter — it's a globally-watched show.
-    excludeRegex: String.raw`glitchart`,
+    // KIRSH brand markers: the synth character "Kirsh" (\bkirsh\b above) collides
+    // with the Korean streetwear brand KIRSH, which spams JP "KIRSH × Charmy Kitty"
+    // Harajuku-flagship launch posts. These markers never appear in real Alien:Earth
+    // chatter, so excluding them is safe. (原宿 = Harajuku, チャーミーキティ = Charmy Kitty.)
+    excludeRegex: String.raw`glitchart|原宿|チャーミーキティ|charmy ?kitty|kirsh ?[×x]`,
     blockLists: [
       'at://did:plc:7csbewiebijimkryjynrmtc2/app.bsky.graph.list/3lxcbpfhbbd2w',
     ],
